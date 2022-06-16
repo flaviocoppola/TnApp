@@ -80,10 +80,6 @@ class DetailsCompN extends Component {
     }
   };
 
-  esitoSpedizione = async () => {
-    const api = 'http://root:hsrtorello.mp@13.95.148.152:4646/service/WEBSERVICE-SGA-BORDERO_MODULIAPP?Abilitato=on&CARTELLA=E%3A%5CApp%5CTemp&FILE_BLOB=&NOME_FILE=&NOME_FILE_ESITO=&SPEDIZIONE_ANNO=2022&SPEDIZIONE_FILIALE=BO&SPEDIZIONE_NUMERO=10188&STATO_CONSEGNA=S&STATO_CONTROLLO=CON&VIAGGIOANNO=2022&VIAGGIOFILIALE=D3&VIAGGIONUMERO=7458&paramEmailError=p.soglia%40tntorello.com&showform=submit'
-  }
-
   completaViaggio = async () => {
     await AsyncStorage.clear();
     this.props.navigation.dispatch(StackActions.replace('Ricerca'));
