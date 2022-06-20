@@ -90,6 +90,7 @@ class Bordero extends Component {
               underlineColorAndroid="transparent"
               onChangeText={newText => this.setState({anno: newText})}
               defaultValue={this.state.anno}
+              placeholderTextColor='#424242'
             />
           </View>
 
@@ -107,6 +108,7 @@ class Bordero extends Component {
               underlineColorAndroid="transparent"
               onChangeText={newText => this.setState({filiale: newText})}
               defaultValue={this.state.filiale}
+              placeholderTextColor='#424242'
             />
           </View>
 
@@ -125,6 +127,7 @@ class Bordero extends Component {
               underlineColorAndroid="transparent"
               onChangeText={newText => this.setState({numero: newText})}
               defaultValue={this.state.numero}
+              placeholderTextColor='#424242'
             />
           </View>
           

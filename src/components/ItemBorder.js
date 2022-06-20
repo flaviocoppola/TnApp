@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Alert,
   Modal,
-  Pressable,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -25,7 +24,6 @@ const Item = ({
     TIPO_INCASSO,
     IMPORTO, 
     STATO_CONTROLLO,
-    CONSEGNATA,
     DDT_DATA,
     navigation 
   }) => {
@@ -36,7 +34,7 @@ const Item = ({
 
   
       try {
-        const supported = await Linking.canOpenURL(link);
+        const supported = await Linking.canOpenURL('http://google.com');
         if (supported) Linking.openURL(link);
       } catch (error) {
         console.error(error);
@@ -166,7 +164,7 @@ const Item = ({
             size={20}
             style={{marginRight: 10, color: 'black'}}
           />
-          <Text style={{fontWeight: 'bold', padding: 2}}>
+          <Text style={{fontWeight: 'bold', padding: 2, color: 'black'}}>
             Spedizione: {NUMERO}/{FILIALE}/{ANNO}
           </Text>
         </View>
@@ -279,7 +277,9 @@ const Item = ({
               color="#fff"
               style={{marginRight: 10}}
             />
-            <Text style={{color: '#fff', fontSize: 10}}>Esita</Text>
+            <Text style={{color: '#fff', fontSize: 10}}>
+            {STATO_CONTROLLO === 'ICO' ? ('Esita') : ('Modifica lo stato')}  
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('Camera')}

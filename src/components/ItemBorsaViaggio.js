@@ -79,9 +79,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: 'black'
   },
   content: {
     marginTop: 10,
+    color: 'black',
   },
   contentTitle: {
     fontWeight: 'bold',

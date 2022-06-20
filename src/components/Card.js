@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     cardTitle: {
       fontWeight: 'bold',
       fontSize: 25,
+      color: 'black'
     },
     image: {
       width: 200,
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
       padding: 10,
       fontSize: 15,
       textAlign: 'center',
+      color: 'black',
     },
   });
   

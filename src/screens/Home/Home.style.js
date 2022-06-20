@@ -9,12 +9,14 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 30,
     fontWeight: 'bold',
+    color: 'black',
   },
   subTitle: {
     fontSize: 20,
     marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    color: 'black',
   },
 });
 

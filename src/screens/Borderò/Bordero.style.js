@@ -29,11 +29,12 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 0,
     backgroundColor: '#fff',
-    color: '#424242',
+    color: 'black'
   },
   title: {
     fontSize: 20,
     marginBottom: 50,
+    color: 'black',
   },
   searchBtn: {
     alignItems: 'center',
@@ -77,7 +78,8 @@ const styles = StyleSheet.create({
   listHeader: {
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'black',
   }
 });
 

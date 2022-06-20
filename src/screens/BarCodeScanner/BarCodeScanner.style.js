@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginBottom: 50,
+    color: 'black'
   },
   searchBtn: {
     alignItems: 'center',

@@ -11,9 +11,16 @@ import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+// import base64 from 'base-64';
+
+// import base64 from 'react-native-base64'
+
 // import DocumentPicker from 'react-native-document-picker';
+import {UNAME, PWORD, POST_API_BRD } from '@env'
+
 
 import styles from './Camera.style';
+import base64 from 'react-native-base64';
 
 export default function Camera({route, navigation}) {
   const [{cameraRef}, {takePicture}] = useCamera(null);
@@ -23,12 +30,12 @@ export default function Camera({route, navigation}) {
   const [anno, setAnno] = React.useState('');
   const [numero, setNumero] = React.useState('');
   const [singleFile, setSingleFile] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const {STATO_CONSEGNA, STATO_CONTROLLO, SP_ANNO, SP_FILIALE, SP_NUMERO} = route.params;
 
   React.useEffect(() => {
     getViaggi()
-    console.log(STATO_CONSEGNA, STATO_CONTROLLO, SP_ANNO, SP_FILIALE, SP_NUMERO);
   });
 
 
@@ -59,39 +66,38 @@ export default function Camera({route, navigation}) {
     }
   };
 
-  const sendImage = () => {
-    console.log(image);
-    Alert.alert('Complimenti', 'Hai correttamente inviato la foto');
-    uploadImage()
+  // const uploadImage = async () => {
+  //   console.log(image);
+  //   //convert image to base64
+  //   const blob = base64.encode(image);
+  //   console.log(blob);
+  // };
 
-  }
 
-  const uploadImage = async () => {
-    // Check if any file is selected or not
-    if (image != null) {
-      // If file selected then create FormData
-      const fileToUpload = image;
-      const data = new FormData();
-      data.append('name', 'Image Upload');
-      data.append('file_attachment', fileToUpload);
-
-      // Please change file upload URL
-      let res = await fetch('http://pippo/upload.php', {
-        method: 'post',
-        body: data,
+  const sendData = async () => {
+    try {
+      setIsLoading(true);
+      // uploadImage();
+      const blob = base64.encode(image);
+      const API = `${POST_API_BRD}&FILE_BLOB=${blob}&NOME_FILE=test.png&NOME_FILE_ESITO=&SPEDIZIONE_ANNO=${SP_ANNO}&SPEDIZIONE_FILIALE=${SP_FILIALE}&SPEDIZIONE_NUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${anno}&VIAGGIOFILIALE=${filiale}&VIAGGIONUMERO=${numero}&paramEmailError=p.soglia%40tntorello.com&showform=submit`;
+      const user = UNAME;
+      const pass = PWORD;
+      const response = await fetch(API, {
         headers: {
-          'Content-Type': 'multipart/form-data; ',
+          Authorization: 'Basic ' + base64.encode(user + ':' + pass),
         },
       });
-      let responseJson = await res.json();
-      if (responseJson.status == 1) {
-        Alert.alert('Upload Successful');
-      }
-    } else {
-      // If no file selected the show alert
-      Alert.alert('Please Select File first');
+      const json = await response.json();
+      console.log(json);
+      navigation.navigate('Viaggio');
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      setImage();
     }
   };
+
 
   return (
     <>
@@ -114,7 +120,7 @@ export default function Camera({route, navigation}) {
 
             <TouchableOpacity
               style={styles.searchBtn}
-              onPress={() => sendImage()}>
+              onPress={() => sendData()}>
               <Icon name="ios-share" size={27} color="white" />
               <Text style={{color: 'white'}}>Invia</Text>
             </TouchableOpacity>
