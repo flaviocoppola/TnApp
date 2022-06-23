@@ -24,6 +24,7 @@ const Item = ({
     TIPO_INCASSO,
     IMPORTO, 
     STATO_CONTROLLO,
+    STATO_CONSEGNA,
     DDT_DATA,
     navigation 
   }) => {
@@ -93,11 +94,11 @@ const Item = ({
                 }}>
                 <Icon
                   name="check-circle"
-                  size={25}
+                  size={50}
                   color="#fff"
                   style={{marginRight: 10}}
                 />
-                <Text style={{color: '#fff', fontSize: 10}}>
+                <Text style={{color: '#fff', fontSize: 20}}>
                   Consegna Regolare
                 </Text>
               </TouchableOpacity>
@@ -106,9 +107,11 @@ const Item = ({
                 onPress={() =>
                   // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
                   {setModalVisible(false), navigation.navigate('Camera', {
-                    STATO_CONSEGNA: 'N',
+                    STATO_CONSEGNA: 'S',
                     STATO_CONTROLLO: 'CPA',
-
+                    SP_ANNO: ANNO,
+                    SP_FILIALE: FILIALE,
+                    SP_NUMERO: NUMERO,
                   })}
                 }
                 style={{
@@ -123,12 +126,43 @@ const Item = ({
                 }}>
                 <Icon
                   name="warning"
-                  size={25}
+                  size={50}
                   color="#fff"
                   style={{marginRight: 10}}
                 />
-                <Text style={{color: '#fff', fontSize: 10}}>
+                <Text style={{color: '#fff', fontSize: 20}}>
                   Consegna Parziale
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
+                  {setModalVisible(false), navigation.navigate('Camera', {
+                    STATO_CONSEGNA: 'S',
+                    STATO_CONTROLLO: 'MCA',
+                    SP_ANNO: ANNO,
+                    SP_FILIALE: FILIALE,
+                    SP_NUMERO: NUMERO,
+                  })}
+                }
+                style={{
+                  flexDirection: 'row',
+                  marginLeft: 20,
+                  padding: 7,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#4682b4',
+                  borderRadius: 10,
+                  marginTop: 10,
+                }}>
+                <Icon
+                  name="error-outline"
+                  size={50}
+                  color="#fff"
+                  style={{marginRight: 10}}
+                />
+                <Text style={{color: '#fff', fontSize: 20}}>
+                  Mancata consegna
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -147,11 +181,11 @@ const Item = ({
                 }}>
                 <Icon
                   name="cancel"
-                  size={25}
+                  size={50}
                   color="#fff"
                   style={{marginRight: 10}}
                 />
-                <Text style={{color: '#fff', fontSize: 10}}>
+                <Text style={{color: '#fff', fontSize: 20}}>
                   Annulla esito
                 </Text>
               </TouchableOpacity>
@@ -282,7 +316,13 @@ const Item = ({
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Camera')}
+            onPress={() => navigation.navigate('Camera',{
+              STATO_CONSEGNA: STATO_CONSEGNA,
+              STATO_CONTROLLO: STATO_CONTROLLO,
+              SP_ANNO: ANNO,
+              SP_FILIALE: FILIALE,
+              SP_NUMERO: NUMERO,
+            })}
             style={{
               flexDirection: 'row',
               marginLeft: 20,
