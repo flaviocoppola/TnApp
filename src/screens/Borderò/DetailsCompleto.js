@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
+  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackActions} from '@react-navigation/native';
@@ -12,7 +13,7 @@ import base64 from 'base-64';
 import {MaterialIndicator} from 'react-native-indicators';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {UNAME, PWORD, APIBORD} from '@env';
+import {UNAME, PWORD, APIBORD, API_IMPEGNO} from '@env';
 import Item from '../../components/ItemBorder';
 import styles from './Bordero.style';
 import SectionList from 'react-native/Libraries/Lists/SectionList';
@@ -35,6 +36,22 @@ class DetailsCompN extends Component {
   componentDidMount() {
     this.getData();
   }
+
+  impegnaViaggio =  () => {
+    const API = `${API_IMPEGNO}?Utente=&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
+    const user = UNAME;
+    const pass = PWORD;
+    try {
+      const response = fetch(API, {
+        headers: {
+          Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   getData = async () => {
     await AsyncStorage.getItem('filiale').then(value => {
@@ -81,7 +98,10 @@ class DetailsCompN extends Component {
   };
 
   completaViaggio = async () => {
-    await AsyncStorage.clear();
+    await AsyncStorage.removeItem('anno');
+    await AsyncStorage.removeItem('filiale');
+    await AsyncStorage.removeItem('numero');
+    this.impegnaViaggio()
     this.props.navigation.dispatch(StackActions.replace('Ricerca'));
   };
 
@@ -112,6 +132,7 @@ class DetailsCompN extends Component {
           <MaterialIndicator />
         ) : (
           <>
+          {/* <Button title="test" onPress={() => console.log(this.state)} /> */}
             <View style={styles.btnContainer}>
               <TouchableOpacity
                 style={styles.btnDetail}
