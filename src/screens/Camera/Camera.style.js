@@ -1,35 +1,48 @@
-import { StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Image } from 'react-native';
 
+const width = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-    container: {
-        position: 'relative'
-      },
-    
-      captueContainer: {
-        position: 'absolute',
-        bottom: 0,
-      },
-      
-      captureBtn: {
-        backgroundColor: 'red'
-      },
-    preview: {
-        flex: 1,
-        alignItems: 'center',
-      },
-      searchBtn: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginTop: 30,
-        backgroundColor: '#424242',
-        padding: 7,
-        borderRadius: 50,
-        marginRight: 20
-      },
-      searchSection: {
-        flexDirection: 'row',
-      },
-})
+  content: {
+    flex: 1,
+    padding: 30,
+  },
+  btnPressStyle: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 30,
+    backgroundColor: '#424242',
+    padding: 10,
+    borderRadius: 50,
+    marginRight: 10
+  },
+  itemImage: {
+    backgroundColor: '#2f455c',
+    height: 150,
+    width: width - 60,
+    resizeMode: 'contain',
+  },
+  itemViewImage: {
+    alignItems: 'center',
+    borderRadius: 20,
+    marginTop: 10,
+    height: 150,
+    width: width - 60,
+    marginBottom: 10,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
+  btnIcon: {
+    marginRight: 10
+  },
+  btnDetail:{
+    backgroundColor: '#4682b4',
+    padding: 10,
+    borderRadius: 50,
+  },
+});
 
-export default styles
+export default styles;
