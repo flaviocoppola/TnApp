@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, Image, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Dimensions, Image, Button } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import base64 from 'react-native-base64';
+
+import {UNAME, PWORD, POST_ALLEGATO_BORDERO, APIURL } from '@env'
 
 import styles from './Camera.style'
 class Camera extends Component {
@@ -55,42 +58,19 @@ class Camera extends Component {
     );
   };
 
-  sendData = async () => {
-    try {
-      setIsLoading(true);
-      // uploadImage();
-      const blob = base64.encode(image);
-      const API = `${POST_API_BRD}&FILE_BLOB=${blob}&NOME_FILE=${SP_NUMERO}-${SP_ANNO}-${SP_FILIALE}.png&NOME_FILE_ESITO=&SPEDIZIONE_ANNO=${SP_ANNO}&SPEDIZIONE_FILIALE=${SP_FILIALE}&SPEDIZIONE_NUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${anno}&VIAGGIOFILIALE=${filiale}&VIAGGIONUMERO=${numero}&paramEmailError=p.soglia%40tntorello.com&showform=submit`;
-      const user = UNAME;
-      const pass = PWORD;
-      const response = await fetch(API, {
-        headers: {
-          Authorization: 'Basic ' + base64.encode(user + ':' + pass),
-        },
-      });
-      const json = await response.json();
-      console.log(json);
-      navigation.navigate('Viaggio');
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-      setImage();
-    }
-  };
-
   onSelectedImage = image => {
     let newDataImage = this.state.fileList;
     const source = {uri: image.path};
+    const blob = base64.encode(image.path);
     let item = {
       url: source,
-      name:
-        this.state.spNumero - this.state.spAnno - this.state.spFiliale + '.png',
-      data: image.data,
+      name: `${this.state.SP_NUMERO}-${this.state.SP_ANNO}-${this.state.SP_FILIALE}.png`,
+      data: blob,
+      //blob: base64.encode(source),
     };
     newDataImage.push(item);
     this.setState({fileList: newDataImage});
-    console.log(this.state.fileList);
+    // console.log(this.state.fileList);
   };
 
   takePhotoFromCamera = () => {
@@ -98,23 +78,56 @@ class Camera extends Component {
       width: 300,
       height: 400,
       cropping: false,
-      includeBase64: true,
+      // includeBase64: false,
     }).then(image => {
       this.onSelectedImage(image);
-      // console.log(image);
+     
+      const blob = base64.encode(image.path);
+      console.log(blob);
+
     });
   };
 
   choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
-      width: 1200,
-      height: 1600,
+      width: 300,
+      height: 400,
       cropping: false,
       multiple: true,
       includeBase64: true,
     }).then(image => {
-      this.onSelectedImage(image);
-      console.log(image);
+      this.onSelectedImage(image); 
+      // console.log(image);
+    });
+  };
+
+  sendData = () => {
+    const {SP_ANNO, SP_NUMERO, SP_FILIALE, vAnno, vFiliale, vNumero,  STATO_CONSEGNA, STATO_CONTROLLO} =
+      this.state;
+    //  console.log(this.state.fileList);
+    this.state.fileList.map(({name, data}) => {
+      // console.log(`Nome file: ${name}, file: ${data}`);
+      const postData = async () => {
+        try {
+          const API = `http://13.95.148.152:4646/service/WEBSEVICE-SGA-BORDERO_ALLEGATI-MODULIAPP?FILE=${data}&NOMEFILE=${name}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+          const user = UNAME;
+          const pass = PWORD;
+          const response = await fetch(API, {
+            headers: {
+              Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+            },
+          });
+
+          //const json = response.json();
+          console.log(response);
+          // navigation.navigate('Viaggio');
+        } catch (error) {
+          console.log(error);
+        } finally {
+          // setIsLoading(false);
+        }
+      };
+      postData();
     });
   };
 
@@ -130,7 +143,7 @@ class Camera extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.btnDetail}
-              onPress={() => console.log('send')}>
+              onPress={() => this.sendData()}>
               <Icon name="send" size={36} color="white" />
             </TouchableOpacity>
           </View>

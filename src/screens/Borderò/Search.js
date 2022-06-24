@@ -118,13 +118,13 @@ class Bordero extends Component {
     } else if (checkImpegno && checkImpegno === email){
       return (
         <View style={styles.container}>
-          <Icon name="hourglass-bottom" size={40} color="black" />
+          <Icon name="play-circle-fill" size={40} color="black" />
           <Text style={styles.title}>Continua il viaggio</Text>
           <TouchableOpacity
               style={styles.actionBtn}
-              onPress={() => this.clear()}>
-              <Icon name="play-circle" size={27} color="white" />
-              <Text style={{color: 'white'}}>Annulla</Text>
+              onPress={() => this.impegnaViaggio()}>
+              <Icon name="check-circle" size={27} color="white" />
+              <Text style={{color: 'white'}}>Vai al viaggio</Text>
             </TouchableOpacity>
         </View>
       )

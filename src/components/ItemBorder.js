@@ -44,6 +44,16 @@ const Item = ({
   
     const [modalVisible, setModalVisible] = React.useState(false);
 
+    const goEsito = () => {
+      //check if IMPORTO exists
+      if (IMPORTO > 0) {
+        Alert.alert("Attenzione", "In questa spedizione è presente un contrassegno", [{text: "Vai all'esito", onPress: () => setModalVisible(true)}])
+      }
+      else {
+        setModalVisible(true)
+      }
+    }
+
     return (
       <View
         style={{
@@ -65,22 +75,27 @@ const Item = ({
           transparent={false}
           visible={modalVisible}
           onRequestClose={() => {
-            Alert.alert('Errore!','Operazione annullata');
+            Alert.alert('Errore!', 'Operazione annullata');
             setModalVisible(!modalVisible);
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Esita la spedizione, allega poi un documento</Text>
+              <Text style={styles.modalText}>
+                Esita la spedizione, allega poi un documento
+              </Text>
               <TouchableOpacity
                 onPress={() =>
                   // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
-                  {setModalVisible(false), navigation.navigate('Camera',{
-                    STATO_CONSEGNA: 'S',
-                    STATO_CONTROLLO: 'CON',
-                    SP_ANNO: ANNO,
-                    SP_FILIALE: FILIALE,
-                    SP_NUMERO: NUMERO,
-                  })}
+                  {
+                    setModalVisible(false),
+                      navigation.navigate('Camera', {
+                        STATO_CONSEGNA: 'S',
+                        STATO_CONTROLLO: 'CON',
+                        SP_ANNO: ANNO,
+                        SP_FILIALE: FILIALE,
+                        SP_NUMERO: NUMERO,
+                      });
+                  }
                 }
                 style={{
                   flexDirection: 'row',
@@ -106,13 +121,16 @@ const Item = ({
               <TouchableOpacity
                 onPress={() =>
                   // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
-                  {setModalVisible(false), navigation.navigate('Camera', {
-                    STATO_CONSEGNA: 'S',
-                    STATO_CONTROLLO: 'CPA',
-                    SP_ANNO: ANNO,
-                    SP_FILIALE: FILIALE,
-                    SP_NUMERO: NUMERO,
-                  })}
+                  {
+                    setModalVisible(false),
+                      navigation.navigate('Camera', {
+                        STATO_CONSEGNA: 'S',
+                        STATO_CONTROLLO: 'CPA',
+                        SP_ANNO: ANNO,
+                        SP_FILIALE: FILIALE,
+                        SP_NUMERO: NUMERO,
+                      });
+                  }
                 }
                 style={{
                   flexDirection: 'row',
@@ -137,13 +155,16 @@ const Item = ({
               <TouchableOpacity
                 onPress={() =>
                   // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
-                  {setModalVisible(false), navigation.navigate('Camera', {
-                    STATO_CONSEGNA: 'S',
-                    STATO_CONTROLLO: 'MCA',
-                    SP_ANNO: ANNO,
-                    SP_FILIALE: FILIALE,
-                    SP_NUMERO: NUMERO,
-                  })}
+                  {
+                    setModalVisible(false),
+                      navigation.navigate('Camera', {
+                        STATO_CONSEGNA: 'S',
+                        STATO_CONTROLLO: 'MCA',
+                        SP_ANNO: ANNO,
+                        SP_FILIALE: FILIALE,
+                        SP_NUMERO: NUMERO,
+                      });
+                  }
                 }
                 style={{
                   flexDirection: 'row',
@@ -166,9 +187,7 @@ const Item = ({
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() =>
-                  setModalVisible(false)
-                }
+                onPress={() => setModalVisible(false)}
                 style={{
                   flexDirection: 'row',
                   marginLeft: 20,
@@ -185,9 +204,7 @@ const Item = ({
                   color="#fff"
                   style={{marginRight: 10}}
                 />
-                <Text style={{color: '#fff', fontSize: 20}}>
-                  Annulla esito
-                </Text>
+                <Text style={{color: '#fff', fontSize: 20}}>Annulla esito</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -292,10 +309,7 @@ const Item = ({
             <Text style={{color: '#fff', fontSize: 10}}>Naviga</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
-              setModalVisible(true)
-            }
+            onPress={() => goEsito()}
             style={{
               flexDirection: 'row',
               marginLeft: 20,
@@ -312,17 +326,19 @@ const Item = ({
               style={{marginRight: 10}}
             />
             <Text style={{color: '#fff', fontSize: 10}}>
-            {STATO_CONTROLLO === 'ICO' ? ('Esita') : ('Modifica lo stato')}  
+              {STATO_CONTROLLO === 'ICO' ? 'Esita' : 'Modifica lo stato'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Camera',{
-              STATO_CONSEGNA: STATO_CONSEGNA,
-              STATO_CONTROLLO: STATO_CONTROLLO,
-              SP_ANNO: ANNO,
-              SP_FILIALE: FILIALE,
-              SP_NUMERO: NUMERO,
-            })}
+            onPress={() =>
+              navigation.navigate('Camera', {
+                STATO_CONSEGNA: STATO_CONSEGNA,
+                STATO_CONTROLLO: STATO_CONTROLLO,
+                SP_ANNO: ANNO,
+                SP_FILIALE: FILIALE,
+                SP_NUMERO: NUMERO,
+              })
+            }
             style={{
               flexDirection: 'row',
               marginLeft: 20,
