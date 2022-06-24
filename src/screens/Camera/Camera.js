@@ -81,10 +81,6 @@ class Camera extends Component {
       // includeBase64: false,
     }).then(image => {
       this.onSelectedImage(image);
-     
-      const blob = base64.encode(image.path);
-      console.log(blob);
-
     });
   };
 
