@@ -1,13 +1,22 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Dimensions, Image, Button } from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+  Image,
+  Button,
+} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import base64 from 'react-native-base64';
+import {MaterialIndicator} from 'react-native-indicators';
 
-import {UNAME, PWORD, POST_ALLEGATO_BORDERO, APIURL } from '@env'
+import {UNAME, PWORD, POST_ALLEGATO_BORDERO, ESITO_BORDERO} from '@env';
 
-import styles from './Camera.style'
+import styles from './Camera.style';
 class Camera extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +30,7 @@ class Camera extends Component {
       vNumero: '',
       STATO_CONSEGNA: '',
       STATO_CONTROLLO: '',
+      isLoading: false,
     };
   }
 
@@ -89,23 +99,56 @@ class Camera extends Component {
       width: 300,
       height: 400,
       cropping: false,
-      multiple: true,
-      includeBase64: true,
+      multiple: false,
     }).then(image => {
-      this.onSelectedImage(image); 
+      this.onSelectedImage(image);
       // console.log(image);
     });
   };
 
+  esitoBordero = async () => {
+    const {
+      SP_ANNO,
+      SP_NUMERO,
+      SP_FILIALE,
+      vAnno,
+      vFiliale,
+      vNumero,
+      STATO_CONSEGNA,
+      STATO_CONTROLLO,
+    } = this.state;
+    try {
+      console.log(this.state);
+      const API = `${ESITO_BORDERO}&NOME_FILE_ESITO=&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+      const user = UNAME;
+      const pass = PWORD;
+      const response = await fetch(API, {
+        headers: {
+          Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+        },
+      });
+      // console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   sendData = () => {
-    const {SP_ANNO, SP_NUMERO, SP_FILIALE, vAnno, vFiliale, vNumero,  STATO_CONSEGNA, STATO_CONTROLLO} =
-      this.state;
-    //  console.log(this.state.fileList);
+    const {
+      SP_ANNO,
+      SP_NUMERO,
+      SP_FILIALE,
+      vAnno,
+      vFiliale,
+      vNumero,
+      STATO_CONSEGNA,
+      STATO_CONTROLLO,
+    } = this.state;
     this.state.fileList.map(({name, data}) => {
-      // console.log(`Nome file: ${name}, file: ${data}`);
       const postData = async () => {
         try {
-          const API = `http://13.95.148.152:4646/service/WEBSEVICE-SGA-BORDERO_ALLEGATI-MODULIAPP?FILE=${data}&NOMEFILE=${name}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+          this.setState({isLoading: true});
+          const API = `${POST_ALLEGATO_BORDERO}FILE=${data}&NOMEFILE=${name}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
           const user = UNAME;
           const pass = PWORD;
           const response = await fetch(API, {
@@ -113,14 +156,13 @@ class Camera extends Component {
               Authorization: 'Basic ' + base64.encode(user + ':' + pass),
             },
           });
-
-          //const json = response.json();
-          console.log(response);
-          // navigation.navigate('Viaggio');
+          // console.log(response);
+          this.esitoBordero();
+          this.props.navigation.navigate('Viaggio');
         } catch (error) {
           console.log(error);
         } finally {
-          // setIsLoading(false);
+          this.setState({isLoading: false});
         }
       };
       postData();
@@ -146,37 +188,42 @@ class Camera extends Component {
         ) : (
           <></>
         )}
-        <FlatList
-          data={this.state.fileList}
-          renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          extraData={this.state}
-        />
-
-        <View style={styles.btnContainer}>
-          <TouchableOpacity
-            style={styles.btnPressStyle}
-            onPress={this.choosePhotoFromLibrary}>
-            <Icon
-              name="photo-library"
-              size={30}
-              color="#fff"
-              style={styles.btnIcon}
+        {this.state.isLoading ? (
+          <MaterialIndicator />
+        ) : (
+          <>
+            <FlatList
+              data={this.state.fileList}
+              renderItem={this.renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              extraData={this.state}
             />
-            <Text>Scegli foto</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btnPressStyle}
-            onPress={this.takePhotoFromCamera}>
-            <Icon
-              name="add-a-photo"
-              size={30}
-              color="#fff"
-              style={styles.btnIcon}
-            />
-            <Text>Scatta foto</Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.btnContainer}>
+              <TouchableOpacity
+                style={styles.btnPressStyle}
+                onPress={this.choosePhotoFromLibrary}>
+                <Icon
+                  name="photo-library"
+                  size={30}
+                  color="#fff"
+                  style={styles.btnIcon}
+                />
+                <Text>Scegli foto</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnPressStyle}
+                onPress={this.takePhotoFromCamera}>
+                <Icon
+                  name="add-a-photo"
+                  size={30}
+                  color="#fff"
+                  style={styles.btnIcon}
+                />
+                <Text>Scatta foto</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
     );
   }
