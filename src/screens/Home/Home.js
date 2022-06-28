@@ -48,7 +48,7 @@ class Home extends Component {
             description={
               'In questa sezione potrai gestire i borderò assegnati, esistando le relative spedizioni'
             }
-            uri={require('../../assets/Image/undraw_Delivery_re_f50b.png')}
+            uri={require('../../assets/Image/undraw_Receipt_re_fre3.png')}
           />
         </View>
       </ScrollView>
