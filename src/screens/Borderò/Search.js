@@ -6,7 +6,7 @@ import {MaterialIndicator} from 'react-native-indicators';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackActions} from '@react-navigation/native';
 
-import {UNAME, PWORD, APIBORD, API_IMPEGNO } from '@env'
+import {UNAME, PWORD, APIBORD, API_IMPEGNO, RIT} from '@env'
 import styles from './Bordero.style';
 
 class Bordero extends Component {
@@ -20,6 +20,7 @@ class Bordero extends Component {
       numero: '',
       email: '',
       checkImpegno: '',
+      ritiro: [],
     };
   }
 
@@ -32,8 +33,25 @@ class Bordero extends Component {
     AsyncStorage.getItem('userData').then(value => {
       let user = JSON.parse(value);
       this.setState({email: user.email});
-      console.log(this.state.email)
-    })
+    });
+  };
+
+  getRitiri = async () => {
+    try {
+      const API_RIT = `${RIT}EmailErrore=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&V_Anno=${this.state.anno}&V_Filiale=${this.state.filiale}&V_Numero=${this.state.numero}&showform=submit`
+      const user = UNAME;
+      const pass = PWORD;
+      const response = await fetch(API_RIT, {
+        headers: {
+          Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+        },
+      });
+      const dataRitiri = await response.json();
+      this.setState({ritiro: dataRitiri['VIAGGIO']['RITIRO']});
+      console.log(this.state.ritiro);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   getViaggi = async () => {
@@ -50,9 +68,11 @@ class Bordero extends Component {
       });
       const json = await response.json();
       this.setState({data: json});
-      // console.log(this.state.data["VIAGGIO"]["SPEDIZIONE"][0]["UTENTE"]);
-      if(this.state.data["VIAGGIO"]["SPEDIZIONE"][0]["UTENTE"]){
-        this.setState({checkImpegno: json["VIAGGIO"]["SPEDIZIONE"][0]["UTENTE"]});
+      this.getRitiri();
+      if (this.state.data['VIAGGIO']['SPEDIZIONE'][0]['UTENTE']) {
+        this.setState({
+          checkImpegno: json['VIAGGIO']['SPEDIZIONE'][0]['UTENTE'],
+        });
         console.log(this.state.checkImpegno);
       }
     } catch (error) {
@@ -60,11 +80,10 @@ class Bordero extends Component {
     } finally {
       this.setState({isLoading: false});
     }
-
   };
 
-  impegnaViaggio =  () => {
-    const API = `${API_IMPEGNO}?Utente=${this.state.email}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
+  impegnaViaggio = () => {
+    const API = `${API_IMPEGNO}Utente=${this.state.email}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
     const user = UNAME;
     const pass = PWORD;
     try {
@@ -77,7 +96,7 @@ class Bordero extends Component {
     } catch (error) {
       console.log(error);
     }
-    this.selezionaViaggio()
+    this.selezionaViaggio();
   };
 
   selezionaViaggio = async () => {
@@ -96,41 +115,39 @@ class Bordero extends Component {
   };
 
   clear = () => {
-    this.setState({data: ''})
-    this.setState({checkImpegno: ''})
-  }
+    this.setState({data: ''});
+    this.setState({checkImpegno: ''});
+  };
 
   render() {
     const {data, isLoading, checkImpegno, email} = this.state;
-    if(checkImpegno && checkImpegno !== email){
+    if (checkImpegno && checkImpegno !== email) {
       return (
         <View style={styles.container}>
           <Icon name="hourglass-bottom" size={40} color="black" />
           <Text style={styles.title}>Viaggio in corso</Text>
           <TouchableOpacity
-              style={styles.actionBtn}
-              onPress={() => this.clear()}>
-              <Icon name="cancel" size={27} color="white" />
-              <Text style={{color: 'white'}}>Annulla</Text>
-            </TouchableOpacity>
+            style={styles.actionBtn}
+            onPress={() => this.clear()}>
+            <Icon name="cancel" size={27} color="white" />
+            <Text style={{color: 'white'}}>Annulla</Text>
+          </TouchableOpacity>
         </View>
-      )
-    } else if (checkImpegno && checkImpegno === email){
+      );
+    } else if (checkImpegno && checkImpegno === email) {
       return (
         <View style={styles.container}>
           <Icon name="play-circle-fill" size={40} color="black" />
           <Text style={styles.title}>Continua il viaggio</Text>
           <TouchableOpacity
-              style={styles.actionBtn}
-              onPress={() => this.impegnaViaggio()}>
-              <Icon name="check-circle" size={27} color="white" />
-              <Text style={{color: 'white'}}>Vai al viaggio</Text>
-            </TouchableOpacity>
+            style={styles.actionBtn}
+            onPress={() => this.impegnaViaggio()}>
+            <Icon name="check-circle" size={27} color="white" />
+            <Text style={{color: 'white'}}>Vai al viaggio</Text>
+          </TouchableOpacity>
         </View>
-      )
-
-    }
-    else if (isLoading) {
+      );
+    } else if (isLoading) {
       return (
         <View style={styles.indicatorContainer}>
           <MaterialIndicator />
@@ -209,7 +226,6 @@ class Bordero extends Component {
             <Icon name="qr-code-2" size={27} color="white" />
             <Text style={{color: 'white'}}>Scansiona </Text>
           </TouchableOpacity>
-          {/* <Button title="Test" onPress={() => this.props.navigation.navigate('Camera')} /> */}
         </View>
       );
     } else if (!isLoading && data.VIAGGIO.SPEDIZIONE.length > 0) {
@@ -222,6 +238,9 @@ class Bordero extends Component {
           </Text>
           <Text style={styles.title}>
             Numero spedizioni: {data.VIAGGIO.SPEDIZIONE.length}
+          </Text>
+          <Text style={styles.title}>
+            Numero ritiri: {this.state.ritiro.length}
           </Text>
           <View style={styles.btnContainer}>
             <TouchableOpacity

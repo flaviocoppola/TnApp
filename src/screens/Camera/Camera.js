@@ -76,11 +76,9 @@ class Camera extends Component {
       url: source,
       name: `${this.state.SP_NUMERO}-${this.state.SP_ANNO}-${this.state.SP_FILIALE}.png`,
       data: blob,
-      //blob: base64.encode(source),
     };
     newDataImage.push(item);
     this.setState({fileList: newDataImage});
-    // console.log(this.state.fileList);
   };
 
   takePhotoFromCamera = () => {
@@ -88,7 +86,6 @@ class Camera extends Component {
       width: 300,
       height: 400,
       cropping: false,
-      // includeBase64: false,
     }).then(image => {
       this.onSelectedImage(image);
     });
@@ -102,7 +99,6 @@ class Camera extends Component {
       multiple: false,
     }).then(image => {
       this.onSelectedImage(image);
-      // console.log(image);
     });
   };
 
@@ -127,7 +123,6 @@ class Camera extends Component {
           Authorization: 'Basic ' + base64.encode(user + ':' + pass),
         },
       });
-      // console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -147,6 +142,7 @@ class Camera extends Component {
     this.state.fileList.map(({name, data}) => {
       const postData = async () => {
         try {
+          console.log(name)
           this.setState({isLoading: true});
           const API = `${POST_ALLEGATO_BORDERO}FILE=${data}&NOMEFILE=${name}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
           const user = UNAME;
@@ -156,7 +152,6 @@ class Camera extends Component {
               Authorization: 'Basic ' + base64.encode(user + ':' + pass),
             },
           });
-          // console.log(response);
           this.esitoBordero();
           this.props.navigation.navigate('Viaggio');
         } catch (error) {
