@@ -27,7 +27,6 @@ class BarcodeScanner extends Component {
     try {
       this.setState({barCode: result});
       const string = new String(result);
-      // console.log(string.substr(3,2));
       this.setState({anno: 20 + string.substr(3,2)})
       this.setState({filiale: string.substr(5,2)})
       this.setState({numero: string.substr(7,8)})
@@ -47,18 +46,17 @@ class BarcodeScanner extends Component {
   render() {
     const {numero, anno, filiale} = this.state
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.container}>
         {this.state.barCode.length > 0 ? (
           <>
             <View
-              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              style={styles.container}>
               <Text style={styles.title}>
                 Viaggio selezionato: {numero}/
                 {filiale}/
                 {anno}
               </Text>
               <Text style={styles.title}>
-                {/* Numero spedizioni: {data.VIAGGIO.SPEDIZIONE.length} */}
               </Text>
               <View style={styles.btnContainer}>
                 <TouchableOpacity

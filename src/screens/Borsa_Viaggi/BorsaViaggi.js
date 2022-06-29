@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {ActivityIndicator, FlatList, View} from 'react-native';
 import base64 from 'base-64';
 import {concat} from 'react-native-reanimated';
-
+import {MaterialIndicator} from 'react-native-indicators';
 import {UNAME, APIURL, PWORD} from '@env'
 import styles from './BorsaViaggi.style';
 import ItemBorsaViaggio from '../../components/ItemBorsaViaggio';
@@ -27,7 +27,6 @@ class BorsaViaggi extends Component {
         },
       });
       const json = await response.json();
-      //console.log(json.array);
       this.setState({data: json.array});
     } catch (error) {
       console.error(error);
@@ -78,7 +77,7 @@ class BorsaViaggi extends Component {
       <View style={styles.container}>
         {isLoading ? (
           <View style={styles.activityContainer}>
-            <ActivityIndicator size="large" />
+            <MaterialIndicator />
           </View>
         ) : (
           <FlatList

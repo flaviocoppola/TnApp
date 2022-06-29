@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Search from '../screens//Borderò/Search';
 import Camera from '../screens/Camera/Camera';
 import BarcodeScanner from '../screens/BarCodeScanner/BarCodeScanner';
-import TabNavigationBorder from './TabNavigationBorder';
 import DetailsCompleto from '../screens/Borderò/DetailsCompleto';
 
 const Stack = createNativeStackNavigator();

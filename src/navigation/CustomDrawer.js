@@ -70,11 +70,9 @@ import {
       color: 'white'
     },
     contentContainer: {
-      // backgroundColor: 'white',
     },
     routeContainer: {
       flex: 1,
-      // backgroundColor: 'white',
       marginTop: 20,
       borderTopWidth: 1,
       borderTopColor: '#ccc',

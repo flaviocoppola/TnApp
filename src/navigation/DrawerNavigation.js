@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Appearance } from 'react-native';
 
 import CustomDrwer from './CustomDrawer';
 import Home from '../screens/Home/Home';

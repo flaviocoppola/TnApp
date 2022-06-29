@@ -45,7 +45,6 @@ const Item = ({
     const [modalVisible, setModalVisible] = React.useState(false);
 
     const goEsito = () => {
-      //check if IMPORTO exists
       if (IMPORTO > 0) {
         Alert.alert("Attenzione", "In questa spedizione è presente un contrassegno", [{text: "Vai all'esito", onPress: () => setModalVisible(true)}])
       }
@@ -56,20 +55,7 @@ const Item = ({
 
     return (
       <View
-        style={{
-          flex: 1,
-          justifyContent: 'space-between',
-          backgroundColor: '#fff',
-          padding: 20,
-          margin: 10,
-          borderWidth: 0.5,
-          borderRadius: 8,
-          elevation: 20,
-          shadowColor: '#171717',
-          shadowOffset: {width: -2, height: 4},
-          shadowOpacity: 0.2,
-          shadowRadius: 3,
-        }}>
+        style={styles.container}>
         <Modal
           animationType="slide"
           transparent={false}
@@ -97,16 +83,7 @@ const Item = ({
                       });
                   }
                 }
-                style={{
-                  flexDirection: 'row',
-                  marginLeft: 20,
-                  padding: 7,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#4682b4',
-                  borderRadius: 10,
-                  marginTop: 10,
-                }}>
+                style={styles.btn}>
                 <Icon
                   name="check-circle"
                   size={50}
@@ -120,7 +97,6 @@ const Item = ({
 
               <TouchableOpacity
                 onPress={() =>
-                  // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
                   {
                     setModalVisible(false),
                       navigation.navigate('Camera', {
@@ -132,16 +108,7 @@ const Item = ({
                       });
                   }
                 }
-                style={{
-                  flexDirection: 'row',
-                  marginLeft: 20,
-                  padding: 7,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#4682b4',
-                  borderRadius: 10,
-                  marginTop: 10,
-                }}>
+                style={styles.btn}>
                 <Icon
                   name="warning"
                   size={50}
@@ -154,7 +121,6 @@ const Item = ({
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
-                  // Alert.alert('Coming soon!', 'Gestirò lo stato della spedizione')
                   {
                     setModalVisible(false),
                       navigation.navigate('Camera', {
@@ -166,16 +132,7 @@ const Item = ({
                       });
                   }
                 }
-                style={{
-                  flexDirection: 'row',
-                  marginLeft: 20,
-                  padding: 7,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#4682b4',
-                  borderRadius: 10,
-                  marginTop: 10,
-                }}>
+                style={styles.btn}>
                 <Icon
                   name="error-outline"
                   size={50}
@@ -188,16 +145,7 @@ const Item = ({
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
-                style={{
-                  flexDirection: 'row',
-                  marginLeft: 20,
-                  padding: 7,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#4682b4',
-                  borderRadius: 10,
-                  marginTop: 10,
-                }}>
+                style={styles.btn}>
                 <Icon
                   name="cancel"
                   size={50}
@@ -291,15 +239,7 @@ const Item = ({
           }}>
           <TouchableOpacity
             onPress={() => openMap(INDIRIZZO, LOCALITA, CAP)}
-            style={{
-              flexDirection: 'row',
-              marginLeft: 20,
-              padding: 7,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#4682b4',
-              borderRadius: 10,
-            }}>
+            style={styles.functionBtn}>
             <Icon
               name="navigation"
               size={25}
@@ -310,15 +250,7 @@ const Item = ({
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => goEsito()}
-            style={{
-              flexDirection: 'row',
-              marginLeft: 20,
-              padding: 7,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#4682b4',
-              borderRadius: 10,
-            }}>
+            style={styles.functionBtn}>
             <Icon
               name="check"
               size={25}
@@ -339,15 +271,7 @@ const Item = ({
                 SP_NUMERO: NUMERO,
               })
             }
-            style={{
-              flexDirection: 'row',
-              marginLeft: 20,
-              padding: 7,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#4682b4',
-              borderRadius: 10,
-            }}>
+            style={styles.functionBtn}>
             <Icon
               name="photo-camera"
               size={25}
@@ -370,6 +294,39 @@ const Item = ({
       alignItems: "center",
       marginTop: 22,
       blurRadius: 1,
+    },
+    functionBtn: {
+      flexDirection: 'row',
+      marginLeft: 20,
+      padding: 7,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#4682b4',
+      borderRadius: 10,
+    },
+    btn:{
+      flexDirection: 'row',
+      marginLeft: 20,
+      padding: 7,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#4682b4',
+      borderRadius: 10,
+      marginTop: 10,
+    },
+    container:{
+      flex: 1,
+      justifyContent: 'space-between',
+      backgroundColor: '#fff',
+      padding: 20,
+      margin: 10,
+      borderWidth: 0.5,
+      borderRadius: 8,
+      elevation: 20,
+      shadowColor: '#171717',
+      shadowOffset: {width: -2, height: 4},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
     },
     modalView: {
       margin: 20,
