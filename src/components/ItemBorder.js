@@ -76,7 +76,7 @@ const Item = ({
                     setModalVisible(false),
                       navigation.navigate('Camera', {
                         STATO_CONSEGNA: 'S',
-                        STATO_CONTROLLO: 'CON',
+                        STATO_CONTROLLO: 'COR',
                         SP_ANNO: ANNO,
                         SP_FILIALE: FILIALE,
                         SP_NUMERO: NUMERO,
@@ -101,7 +101,7 @@ const Item = ({
                     setModalVisible(false),
                       navigation.navigate('Camera', {
                         STATO_CONSEGNA: 'S',
-                        STATO_CONTROLLO: 'CPA',
+                        STATO_CONTROLLO: 'CPR',
                         SP_ANNO: ANNO,
                         SP_FILIALE: FILIALE,
                         SP_NUMERO: NUMERO,
@@ -125,7 +125,7 @@ const Item = ({
                     setModalVisible(false),
                       navigation.navigate('Camera', {
                         STATO_CONSEGNA: 'S',
-                        STATO_CONTROLLO: 'MCA',
+                        STATO_CONTROLLO: 'CM',
                         SP_ANNO: ANNO,
                         SP_FILIALE: FILIALE,
                         SP_NUMERO: NUMERO,
