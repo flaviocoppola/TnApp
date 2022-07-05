@@ -116,7 +116,7 @@ class Camera extends Component {
       STATO_CONTROLLO,
       note
     } = this.state;
-    const fileEsito = `${SP_ANNO}-${SP_ANNO}-${SP_FILIALE}` + Date.now();
+    const fileEsito = `${SP_ANNO}-${SP_FILIALE}-${SP_NUMERO}` + Date.now();
     console.log(fileEsito);
     try {
       const API = `${ESITO_BORDERO}&NOME_FILE_ESITO=${fileEsito}&Note=${note}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
