@@ -202,7 +202,6 @@ class DetailsCompN extends Component {
                 <Icon name="sync" size={36} color="white" />
               </TouchableOpacity>
             </View>
-            {/* <FlatList data={this.state.ritiro} keyExtractor={item => item.NUMERORITIRO} renderItem={this.renderRitiri} /> */}
             <ScrollView>
               <View style={{padding: 5, marginBottom: 10}}>
                 <FlatList

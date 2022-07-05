@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   Button,
+  TextInput,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -31,6 +32,7 @@ class Camera extends Component {
       STATO_CONSEGNA: '',
       STATO_CONTROLLO: '',
       isLoading: false,
+      note: '',
     };
   }
 
@@ -112,10 +114,12 @@ class Camera extends Component {
       vNumero,
       STATO_CONSEGNA,
       STATO_CONTROLLO,
+      note
     } = this.state;
+    const fileEsito = `${SP_ANNO}-${SP_ANNO}-${SP_FILIALE}` + Date.now();
+    console.log(fileEsito);
     try {
-      console.log(this.state);
-      const API = `${ESITO_BORDERO}&NOME_FILE_ESITO=&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+      const API = `${ESITO_BORDERO}&NOME_FILE_ESITO=${fileEsito}&Note=${note}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
       const user = UNAME;
       const pass = PWORD;
       const response = await fetch(API, {
@@ -138,13 +142,14 @@ class Camera extends Component {
       vNumero,
       STATO_CONSEGNA,
       STATO_CONTROLLO,
+      note
     } = this.state;
     this.state.fileList.map(({name, data}) => {
       const postData = async () => {
         try {
-          console.log(name)
+          console.log(name);
           this.setState({isLoading: true});
-          const API = `${POST_ALLEGATO_BORDERO}FILE=${data}&NOMEFILE=${name}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+          const API = `${POST_ALLEGATO_BORDERO}FILE=${data}&NOMEFILE=${name}&NOTE=${note}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
           const user = UNAME;
           const pass = PWORD;
           const response = await fetch(API, {
@@ -192,6 +197,14 @@ class Camera extends Component {
               renderItem={this.renderItem}
               keyExtractor={(item, index) => index.toString()}
               extraData={this.state}
+            />
+            <TextInput
+              placeholder="Note"
+              placeholderTextColor="#424242"
+              style={styles.inputNote}
+              underlineColorAndroid="transparent"
+              multiline={true}
+              onChangeText={text => this.setState({note: text})}
             />
             <View style={styles.btnContainer}>
               <TouchableOpacity

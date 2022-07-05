@@ -43,6 +43,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 50,
   },
+  inputNote: {
+    borderColor: '#424242',
+    borderWidth: 0.8,
+    borderRadius: 10,
+    padding: 10,
+    height: 100,
+    marginTop: 20,
+    color: '#000',
+  }
 });
 
 export default styles;
