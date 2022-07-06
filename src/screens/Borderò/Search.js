@@ -5,8 +5,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MaterialIndicator} from 'react-native-indicators';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackActions} from '@react-navigation/native';
+import {API_RITIRI, UNAME, PWORD, APIBORDERO, IMPEGNO_API } from '@env'
 
-import {UNAME, PWORD, APIBORD, API_IMPEGNO, RIT} from '@env'
 import styles from './Bordero.style';
 
 class Bordero extends Component {
@@ -38,7 +38,7 @@ class Bordero extends Component {
 
   getRitiri = async () => {
     try {
-      const API_RIT = `${RIT}EmailErrore=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&V_Anno=${this.state.anno}&V_Filiale=${this.state.filiale}&V_Numero=${this.state.numero}&showform=submit`
+      const API_RIT = `${API_RITIRI}EmailErrore=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&V_Anno=${this.state.anno}&V_Filiale=${this.state.filiale}&V_Numero=${this.state.numero}&showform=submit`
       const user = UNAME;
       const pass = PWORD;
       const response = await fetch(API_RIT, {
@@ -48,7 +48,7 @@ class Bordero extends Component {
       });
       const dataRitiri = await response.json();
       this.setState({ritiro: dataRitiri['VIAGGIO']['RITIRO']});
-      console.log(this.state.ritiro);
+      // console.log(this.state.ritiro);
     } catch (error) {
       console.error(error);
     }
@@ -57,7 +57,7 @@ class Bordero extends Component {
   getViaggi = async () => {
     try {
       this.setState({isLoading: true});
-      const APIURL = `${APIBORD}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=p.soglia%40tntorello.com&showform=submit`;
+      const APIURL = `${APIBORDERO}VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
 
       const user = UNAME;
       const pass = PWORD;
@@ -83,7 +83,7 @@ class Bordero extends Component {
   };
 
   impegnaViaggio = () => {
-    const API = `${API_IMPEGNO}Utente=${this.state.email}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
+    const API = `${IMPEGNO_API}Utente=${this.state.email}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
     const user = UNAME;
     const pass = PWORD;
     try {

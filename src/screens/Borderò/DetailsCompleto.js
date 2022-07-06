@@ -12,9 +12,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackActions} from '@react-navigation/native';
 import base64 from 'base-64';
 import {MaterialIndicator} from 'react-native-indicators';
+import {API_RITIRI, UNAME, PWORD, APIBORDERO, IMPEGNO_API } from '@env'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import {UNAME, PWORD, APIBORD, API_IMPEGNO, RIT} from '@env';
 import Item from '../../components/ItemBorder';
 import ItemRitiri from '../../components/ItemRitiri';
 import styles from './Bordero.style';
@@ -58,7 +58,8 @@ class DetailsCompN extends Component {
     });
     try {
       this.setState({isLoading: true});
-      const APIURL = `${APIBORD}&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=p.soglia%40tntorello.com&showform=submit`;
+      const APIURL = `${APIBORDERO}VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
+
       const user = UNAME;
       const pass = PWORD;
       const response = await fetch(APIURL, {
@@ -84,7 +85,7 @@ class DetailsCompN extends Component {
   };
 
   impegnaViaggio = () => {
-    const API = `${API_IMPEGNO}Utente=&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
+    const API = `${IMPEGNO_API}Utente=&VIAGGIOANNO=${this.state.anno}&VIAGGIOFILIALE=${this.state.filiale}&VIAGGIONUMERO=${this.state.numero}&paramEmailError=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&showform=submit`;
     const user = UNAME;
     const pass = PWORD;
     try {
@@ -115,13 +116,11 @@ class DetailsCompN extends Component {
         this.setState({numero: value});
       }
     });
-    console.log(this.state)
+    const API_RIT = `${API_RITIRI}EmailErrore=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&V_Anno=${this.state.anno}&V_Filiale=${this.state.filiale}&V_Numero=${this.state.numero}&showform=submit`
     const user = UNAME;
     const pass = PWORD;
-    console.log(this.state)
-    const API = `${RIT}EmailErrore=f.coppola%40tntorello.com%2C+p.soglia%40tntorello.com&V_Anno=${this.state.anno}&V_Filiale=${this.state.filiale}&V_Numero=${this.state.numero}&showform=submit`;
-    try {
-      const response = await fetch(API, {
+  try {
+      const response = await fetch(API_RIT, {
         headers: {
           Authorization: 'Basic ' + base64.encode(user + ':' + pass),
         },
