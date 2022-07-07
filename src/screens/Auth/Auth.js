@@ -12,9 +12,9 @@ import {authorize} from 'react-native-app-auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {CLIENT_ID_, AUTHORIZATION_ENDPOINT, TOKEN_ENDPOINT, REDIRECT_URL} from '@env'
 
 import styles from './Auth.style';
-import {CLIENTID, REDIRECTURL, AUTHORIZATIONENDPOINT, TOKENENDPOINT} from '@env'
 
 type State = {
   hasLoggedInOnce: boolean,
@@ -27,13 +27,13 @@ type State = {
 };
 
 const config = {
-  clientId: CLIENTID,
-  redirectUrl: REDIRECTURL,
+  clientId: CLIENT_ID_,
+  redirectUrl: REDIRECT_URL,
   additionalParameters: {prompt: 'select_account'},
   scopes: ['openid', 'profile', 'email', 'offline_access'],
   serviceConfiguration: {
-    authorizationEndpoint: AUTHORIZATIONENDPOINT,
-    tokenEndpoint: TOKENENDPOINT,
+    authorizationEndpoint: AUTHORIZATION_ENDPOINT,
+    tokenEndpoint: TOKEN_ENDPOINT,
   },
 };
 class Auth extends Component {
@@ -52,6 +52,7 @@ class Auth extends Component {
 
   componentDidMount() {
     this.getData();
+    console.log(REDIRECT_URL)
   }
 
   animateState(nextState: $Shape<State>, delay: number = 0) {
