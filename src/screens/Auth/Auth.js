@@ -52,7 +52,7 @@ class Auth extends Component {
 
   componentDidMount() {
     this.getData();
-    console.log(REDIRECT_URL)
+    // console.log(REDIRECT_URL)
   }
 
   animateState(nextState: $Shape<State>, delay: number = 0) {
