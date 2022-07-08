@@ -39,14 +39,14 @@ class Home extends Component {
           <Card
             title={'Borsa viaggi'}
             description={
-              'In questa sezione puoi consultare i viaggi disponibili e contattare il responsabile per le informazioni'
+              'Consulta i viaggi disponibili e contattare il responsabile per le informazioni'
             }
             uri={require('../../assets/Image/undraw_Delivery_re_f50b.png')}
           />
           <Card
             title={'Borderò'}
             description={
-              'In questa sezione potrai gestire i borderò assegnati, esistando le relative spedizioni'
+              'Gestisci i borderò assegnati, esistando le relative spedizioni'
             }
             uri={require('../../assets/Image/undraw_Receipt_re_fre3.png')}
           />
