@@ -145,6 +145,7 @@ class Camera extends Component {
       STATO_CONTROLLO,
       note
     } = this.state;
+    this.esitoBordero();
     this.state.fileList.map(({name, data}) => {
       const postData = async () => {
         try {
@@ -158,7 +159,6 @@ class Camera extends Component {
               Authorization: 'Basic ' + base64.encode(user + ':' + pass),
             },
           });
-          this.esitoBordero();
           this.props.navigation.navigate('Viaggio');
         } catch (error) {
           console.log(error);
