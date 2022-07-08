@@ -5,7 +5,7 @@ import {concat} from 'react-native-reanimated';
 import {MaterialIndicator} from 'react-native-indicators';
 import styles from './BorsaViaggi.style';
 import ItemBorsaViaggio from '../../components/ItemBorsaViaggio';
-import {APIURL, USER, PASS} from '@env'
+import {API_URL, UNAME, PWORD} from '@env'
 
 class BorsaViaggi extends Component {
   constructor(props) {
@@ -19,12 +19,9 @@ class BorsaViaggi extends Component {
 
   async getViaggi() {
     try {
-      const user = USER;
-      const pass = PASS;
-      console.log(user, pass)
-      const response = await fetch(APIURL, {
+      const response = await fetch(API_URL, {
         headers: {
-          Authorization: 'Basic ' + base64.encode(USER + ':' + PASS),
+          Authorization: 'Basic ' + base64.encode(UNAME + ':' + PWORD),
         },
       });
       const json = await response.json();
