@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import base64 from 'react-native-base64';
 import {MaterialIndicator} from 'react-native-indicators';
 
-import {UNAME, PWORD, POST_ALLEGATO_BORDERO, ESITO_BORDERO} from '@env';
+import {UNAME, PWORD, POST_ALLEGATO_BORDERO_STREAM, ESITO_BORDERO} from '@env';
 
 import styles from './Camera.style';
 class Camera extends Component {
@@ -81,12 +81,11 @@ class Camera extends Component {
 
     let item = {
       url: source,
-      name: `${this.state.SP_NUMERO}-${this.state.SP_ANNO}-${this.state.SP_FILIALE}.png`,
+      name: `${this.state.SP_NUMERO}-${this.state.SP_ANNO}-${this.state.SP_FILIALE}.jpg`,
       data: image.data,
     };
     newDataImage.push(item);
     this.setState({fileList: newDataImage});
-       console.log(typeof image.data);
   };
 
   takePhotoFromCamera = () => {
@@ -149,21 +148,42 @@ class Camera extends Component {
 
     for (var i = 0; i < this.state.fileList.length; i++) {
 
+      const body = {
+        "bordero": {
+          viaggio_anno: vAnno,
+          viaggio_filiale: vFiliale,
+          viaggio_numero: vNumero,
+          spedizione_anno: SP_ANNO,
+          spedizione_filiale: SP_FILIALE,
+          spedizione_numero: SP_NUMERO,
+          allegato: [
+            {
+              nomefile: this.state.fileList[i].name,
+              blob: this.state.fileList[i].data,
+            }
+          ]
+        }
+      }
       try {
-        const API = `${POST_ALLEGATO_BORDERO}FILE=${this.state.fileList[i].data}&NOMEFILE=${this.state.fileList[i].name}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=+f.coppola%40tntorello.com&showform=submit`;
         const user = UNAME;
         const pass = PWORD;
-        const response = await fetch(API, {
-          headers: {
-            Authorization: 'Basic ' + base64.encode(user + ':' + pass),
-          },
+        const response = await fetch(POST_ALLEGATO_BORDERO_STREAM, {
+          // headers: {
+          //   Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+          // },
+          method: 'POST',
+             headers: {
+               'Content-Type': 'application/json',
+               'encType':'multipart/form-data',
+               Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+             },
+          body: JSON.stringify(body)
         });
         console.log(response);
       } catch (error) {
         console.log(error);
       }
       // console.log(this.state.fileList[i].data);
-
     }
     this.props.navigation.navigate('Viaggio');
     this.setState({isLoading: false});
