@@ -71,17 +71,22 @@ class Camera extends Component {
     );
   };
 
-  onSelectedImage = image => {
+  onSelectedImage = async image => {
     let newDataImage = this.state.fileList;
     const source = {uri: image.path};
-    const blob = base64.encode(image.path);
+
+    // ImgToBase64.getBase64String(image.path)
+    //   .then(base64String => console.log(base64String))
+    //   .catch(err => console.log(err));
+
     let item = {
       url: source,
       name: `${this.state.SP_NUMERO}-${this.state.SP_ANNO}-${this.state.SP_FILIALE}.png`,
-      data: blob,
+      data: image.data,
     };
     newDataImage.push(item);
     this.setState({fileList: newDataImage});
+       console.log(typeof image.data);
   };
 
   takePhotoFromCamera = () => {
@@ -89,6 +94,8 @@ class Camera extends Component {
       width: 300,
       height: 400,
       cropping: false,
+      includeBase64: true,
+      compressImageQuality: 0.5,
     }).then(image => {
       this.onSelectedImage(image);
     });
@@ -100,6 +107,8 @@ class Camera extends Component {
       height: 400,
       cropping: false,
       multiple: false,
+      includeBase64: true,
+      compressImageQuality: 0.5,
     }).then(image => {
       this.onSelectedImage(image);
     });
@@ -115,10 +124,9 @@ class Camera extends Component {
       vNumero,
       STATO_CONSEGNA,
       STATO_CONTROLLO,
-      note
+      note,
     } = this.state;
     const fileEsito = `${SP_ANNO}-${SP_FILIALE}-${SP_NUMERO}` + Date.now();
-    // console.log(fileEsito);
     try {
       const API = `${ESITO_BORDERO}&NOME_FILE_ESITO=${fileEsito}&Note=${note}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
       const user = UNAME;
@@ -133,41 +141,32 @@ class Camera extends Component {
     }
   };
 
-  sendData = () => {
-    const {
-      SP_ANNO,
-      SP_NUMERO,
-      SP_FILIALE,
-      vAnno,
-      vFiliale,
-      vNumero,
-      STATO_CONSEGNA,
-      STATO_CONTROLLO,
-      note
-    } = this.state;
+  sendData = async () => {
+    this.setState({isLoading: true});
+    const {SP_ANNO, SP_NUMERO, SP_FILIALE, vAnno, vFiliale, vNumero} =
+      this.state;
     this.esitoBordero();
-    this.state.fileList.map(({name, data}) => {
-      const postData = async () => {
-        try {
-          console.log(name);
-          this.setState({isLoading: true});
-          const API = `${POST_ALLEGATO_BORDERO}FILE=${data}&NOMEFILE=${name}&NOTE=${note}&STATO_CONSEGNA=${STATO_CONSEGNA}&STATO_CONTROLLO=${STATO_CONTROLLO}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=p.soglia%40tntorello.com%2C+f.coppola%40tntorello.com&showform=submit`;
-          const user = UNAME;
-          const pass = PWORD;
-          const response = await fetch(API, {
-            headers: {
-              Authorization: 'Basic ' + base64.encode(user + ':' + pass),
-            },
-          });
-          this.props.navigation.navigate('Viaggio');
-        } catch (error) {
-          console.log(error);
-        } finally {
-          this.setState({isLoading: false});
-        }
-      };
-      postData();
-    });
+
+    for (var i = 0; i < this.state.fileList.length; i++) {
+
+      try {
+        const API = `${POST_ALLEGATO_BORDERO}FILE=${this.state.fileList[i].data}&NOMEFILE=${this.state.fileList[i].name}&SPEDIZIONEANNO=${SP_ANNO}&SPEDIZIONEFILIALE=${SP_FILIALE}&SPEDIZIONENUMERO=${SP_NUMERO}&VIAGGIOANNO=${vAnno}&VIAGGIOFILIALE=${vFiliale}&VIAGGIONUMERO=${vNumero}&paramEmailError=+f.coppola%40tntorello.com&showform=submit`;
+        const user = UNAME;
+        const pass = PWORD;
+        const response = await fetch(API, {
+          headers: {
+            Authorization: 'Basic ' + base64.encode(user + ':' + pass),
+          },
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+      // console.log(this.state.fileList[i].data);
+
+    }
+    this.props.navigation.navigate('Viaggio');
+    this.setState({isLoading: false});
   };
 
   render() {
